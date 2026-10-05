@@ -30,7 +30,7 @@ This will only take 10 checks since there are at most 10 cells with a cost of 0 
 
 ## Subtask 6 (N = 1)
 
-Prerequisite: Prefix Sums [If you do not know prefix sums, [this is a good resource](https://usaco.guide/silver/prefix-sums)]
+Prerequisite: Prefix Sums [If you do not know prefix sums, [read this](https://resources.spoi.org.in/techniques/static-range-queries/when-inverses-exist/prefix-sums/)]
 
 Since N = 1, this is basically a 1D array. Let's call this array C.
 
@@ -40,7 +40,7 @@ This can be done using prefix sums.
 Let pref[i] be the number of 0s from index 1 to i.
 
 The code will look something like this:
-```
+```cpp
 if (C[i] == 0) pref[i] = pref[i-1]+1;
 else pref[i] = pref[i-1];
 ```
@@ -51,10 +51,65 @@ The time complexity of this solution is O(M) for preprocessing and O(Q) for proc
 
 ## Subtask 8 (No additional constraints)
 
-Prerequisite: 2D Prefix Sums [If you do not know 2D prefix sums, [this is a good resource](https://usaco.guide/silver/more-prefix-sums#2d-prefix-sums)]
+Prerequisite: 2D Prefix Sums
 
 We can extend the solution of Subtask 6 to use 2D prefix sums, which allows us to query the number of 0s between (A, B) and (C, D) in O(1).
 
 The time complexity of this solution is O($N \times M$) for preprocessing and O(Q) for the queries. Therefore, the total time complexity of this solution is O($N \times M$ + Q), which passes this subtask.
 
-[C++ Code](https://www.codechef.com/viewsolution/1356355671)
+My implementation of the above solution:
+```cpp
+#include <bits/stdc++.h>
+#define endl '\n'
+#define flash ios_base::sync_with_stdio(false); cout.tie(NULL); cin.tie(NULL);
+#define ll long long
+#define ull unsigned ll
+
+const ll INF = 1e18;
+const ll MOD = 1e9+7;
+
+using namespace std;
+
+void solve()
+{
+    ll n, m;
+    cin >> n >> m;
+    vector<vector<ll>> cost(n+1, vector<ll>(m+1));
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= m; j++) cin >> cost[i][j];
+    }
+
+    vector<vector<ll>> pref(n+1, vector<ll>(m+1));
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= m; j++) pref[i][j] = pref[i-1][j]+pref[i][j-1]-pref[i-1][j-1]+(cost[i][j] == 0);
+    }
+
+    ll q;
+    cin >> q;
+    while (q--)
+    {
+        ll a, b, c, d;
+        cin >> a >> b >> c >> d;
+
+        ll zeros = pref[c][d]-pref[a-1][d]-pref[c][b-1]+pref[a-1][b-1];
+
+        if (zeros >= 1) cout << 0 << endl;
+        else cout << 1 << endl;
+    }
+}
+
+int main()
+{
+	flash;
+    #ifdef LOCAL
+        freopen("inout/burger.in", "r", stdin);
+        freopen("inout/burger.out", "w", stdout);
+    #endif
+
+    solve();
+
+    return 0;
+}
+```
