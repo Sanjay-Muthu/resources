@@ -45,7 +45,7 @@ if (C[i] == 0) pref[i] = pref[i-1]+1;
 else pref[i] = pref[i-1];
 ```
 
-We can do $\text{pref}\_{b}$ - \text{pref}\_{a-1}$ to find the number of 0s between a and b. If $\text{pref}\_{b} - \text{pref}_{a-1}$ is greater than 0, we know that there is at least one 0 between a and b and the cost of the path will be 0, otherwise the cost of the path will be 1.
+We can do ${}\text{pref}\_{b} - \text{pref}\_{a-1}$ to find the number of 0s between a and b. If $\text{pref}\_{b} - \text{pref}\_{a-1}$ is greater than 0, we know that there is at least one 0 between a and b and the cost of the path will be 0, otherwise the cost of the path will be 1.
 
 The time complexity of this solution is O($M$) for preprocessing and O($Q$) for processing the queries. Therefore, the total time complexity of this solution is O(M + Q), which passes this subtask.
 
